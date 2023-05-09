@@ -21,7 +21,7 @@ class BaseModel():
 
     def __str__(self):
         """Informal string representation of instance."""
-        return "[{:s}] ({:s}) {:s}".format(
+        return "[{:s}] ({:s}) {}".format(
             self.__class__.__name__,
             self.id,
             self.__dict__
@@ -43,8 +43,3 @@ class BaseModel():
         dictionary["created_at"] = datetime.isoformat(dictionary["created_at"])
         dictionary["updated_at"] = datetime.isoformat(dictionary["updated_at"])
         return dictionary
-
-
-if __name__ == "__main__":
-    model = BaseModel()
-    model.to_dict()
