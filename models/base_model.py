@@ -20,6 +20,9 @@ class BaseModel():
         self.created_at = datetime.today()
         self.updated_at = datetime.today()
 
+        if kwargs is None:
+            kwargs = {}
+
         for key in kwargs:
             if key != "__class__":
                 value = kwargs[key]
@@ -41,7 +44,7 @@ class BaseModel():
     def save(self):
         """Update the attribute updated_at with the current datetime."""
         self.updated_at = datetime.today()
-        storage.save(self)
+        storage.save()
 
     def to_dict(self):
         """Get __dict__ dictionary of key/value pairs.

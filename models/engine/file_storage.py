@@ -20,19 +20,20 @@ class FileStorage():
             obj (object): Object to add
         """
         key = "{:s}.{:s}".format(obj.__class__.__name__, obj.id)
-        self.__objects[key] = obj
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """Save objects to JSON file."""
-        json_str = json.dumps(self.__objects)
-        with open(self.__file_path, "w") as file:
-            file.write(json_str)
+        dictionary = {key: value.to_dict() for key,
+                      value in FileStorage.__objects.items()}
+
+        with open(FileStorage.__file_path, "w") as file:
+            json.dump(dictionary, file)
 
     def reload(self):
         """Reload objects from JSON file."""
-        try:
-            with open(self.__file_path, "r") as file:
-                json_str = file.read()
-                objects = json.loads(json_str)
-        except FileNotFoundError:
-            pass
+        with open(FileStorage.__file_path, "r") as file:
+            try:
+                FileStorage.__objects = json.load(file)
+            except FileNotFoundError as error:
+                print("oops an error occurred:", error)
