@@ -2,6 +2,7 @@
 """Module containing the class BaseModel."""
 import uuid
 from datetime import datetime
+from models import storage
 
 
 class BaseModel():
@@ -26,6 +27,9 @@ class BaseModel():
                     value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
                 setattr(self, key, value)
 
+        if kwargs == {}:
+            storage.new(self)
+
     def __str__(self):
         """Informal string representation of instance."""
         return "[{:s}] ({:s}) {}".format(
@@ -37,6 +41,7 @@ class BaseModel():
     def save(self):
         """Update the attribute updated_at with the current datetime."""
         self.updated_at = datetime.today()
+        storage.save(self)
 
     def to_dict(self):
         """Get __dict__ dictionary of key/value pairs.
