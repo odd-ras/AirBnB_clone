@@ -37,8 +37,7 @@ class HBNBCommand(cmd.Cmd):
 
         def callback(instance): print(instance.__str__())
 
-        if not self.__on_found(instance_id, callback):
-            print("** no instance found **")
+        self.__on_found(instance_id, callback)
 
     def do_destroy(self, line):
         """Destroy an object.
@@ -54,8 +53,7 @@ class HBNBCommand(cmd.Cmd):
             del storage.all()[key]
             storage.save()
 
-        if not self.__on_found(instance_id, callback, key=True):
-            print("** no instance found **")
+        self.__on_found(instance_id, callback, key=True)
 
     def do_all(self, line: str):
         """Print all instances.
@@ -75,19 +73,43 @@ class HBNBCommand(cmd.Cmd):
             if class_name in key:
                 print(instances[key])
 
+    def do_update(self, line: str):
+        """Update an object.
+
+        Usage:
+        update <class> <id> <attribute> "<value>"
+        """
+        if not self.__validate(line, withAttr=True):
+            return
+        [command, instance_id, attr, value] = line.strip().split(" ")[:4]
+
+        def callback(instance):
+            try:
+                setattr(instance, attr, type(
+                    getattr(instance, attr, ""))(value))
+            except (TypeError, ValueError):
+                setattr(instance, attr, value)
+            finally:
+                instance.save()
+
+        self.__on_found(instance_id, callback)
+
     def do_EOF(self, line):
         """Exit gracefully."""
+        return True
+
+    def do_quit(self, line):
+        """Quit command to exit the program."""
         return True
 
     def emptyline(self):
         """Don't execute anything."""
         pass
 
-    def do_quit(self, line):
-        """Quit command to exit the program."""
-        return True
-
     def __validate(self, line: str, **kwargs):
+        if kwargs.get("withAttr"):
+            kwargs["withId"] = True
+
         if not line:
             print("** class name missing **")
             return False
@@ -97,13 +119,28 @@ class HBNBCommand(cmd.Cmd):
         if command not in self.classes.keys():
             print("** class doesn't exist **")
             return False
-        if kwargs and kwargs["withId"]:
+        if kwargs.get("withId"):
             try:
                 instance_id = line.split(" ")[1]
             except IndexError:
                 instance_id = None
             if instance_id is None:
                 print("** instance id missing **")
+                return False
+        if kwargs.get("withAttr"):
+            try:
+                attribute = line.split(" ")[2]
+            except IndexError:
+                attribute = None
+            try:
+                value = line.split(" ")[3]
+            except IndexError:
+                value = None
+            if attribute is None:
+                print("** attribute name missing **")
+                return False
+            if value is None:
+                print("** value missing **")
                 return False
         return True
 
@@ -117,7 +154,7 @@ class HBNBCommand(cmd.Cmd):
                     callback(instances[key])
                 return True
         else:
-            return False
+            print("** no instance found **")
 
 
 if __name__ == "__main__":
