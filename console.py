@@ -3,6 +3,7 @@
 import cmd
 from models import storage
 from models.base_model import BaseModel
+from models.user import User
 from typing import Callable, Any
 
 
@@ -10,7 +11,10 @@ class HBNBCommand(cmd.Cmd):
     """Define a command-line interpreter."""
 
     prompt = "(hbnb) "
-    classes = {"BaseModel": BaseModel}
+    models = {
+        "BaseModel": BaseModel,
+        "User": User
+    }
 
     def do_create(self, line: str):
         """Create an object.
@@ -21,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
         if not self.__validate(line):
             return
         line = line.strip()
-        obj = self.classes[line]()
+        obj = self.models[line]()
         obj.save()
         print(obj.id)
 
@@ -33,13 +37,12 @@ class HBNBCommand(cmd.Cmd):
         """
         if not self.__validate(line, withId=True):
             return
-        instance_id = line.strip().split(" ")[1]
+        key = ".".join(line.strip().split(" "))
 
         def callback(instance): print(instance.__str__())
+        self.__on_found(key, callback)
 
-        self.__on_found(instance_id, callback)
-
-    def do_destroy(self, line):
+    def do_destroy(self, line: str):
         """Destroy an object.
 
         Usage:
@@ -47,13 +50,12 @@ class HBNBCommand(cmd.Cmd):
         """
         if not self.__validate(line, withId=True):
             return
-        instance_id = line.strip().split(" ")[1]
+        key = ".".join(line.strip().split(" "))
 
         def callback(key):
             del storage.all()[key]
             storage.save()
-
-        self.__on_found(instance_id, callback, key=True)
+        self.__on_found(key, callback, returnKey=True)
 
     def do_all(self, line: str):
         """Print all instances.
@@ -82,6 +84,7 @@ class HBNBCommand(cmd.Cmd):
         if not self.__validate(line, withAttr=True):
             return
         [command, instance_id, attr, value] = line.strip().split(" ")[:4]
+        key = ".".join([command, instance_id])
 
         def callback(instance):
             try:
@@ -91,14 +94,13 @@ class HBNBCommand(cmd.Cmd):
                 setattr(instance, attr, value)
             finally:
                 instance.save()
+        self.__on_found(key, callback)
 
-        self.__on_found(instance_id, callback)
-
-    def do_EOF(self, line):
+    def do_EOF(self, line: str):
         """Exit gracefully."""
         return True
 
-    def do_quit(self, line):
+    def do_quit(self, line: str):
         """Quit command to exit the program."""
         return True
 
@@ -116,7 +118,7 @@ class HBNBCommand(cmd.Cmd):
         line = line.strip()
         command = line.split(" ")[0]
 
-        if command not in self.classes.keys():
+        if command not in self.models.keys():
             print("** class doesn't exist **")
             return False
         if kwargs.get("withId"):
@@ -144,14 +146,14 @@ class HBNBCommand(cmd.Cmd):
                 return False
         return True
 
-    def __on_found(self, id: str, callback: Callable[[Any], Any], **kwargs):
+    def __on_found(self, key: str, callback: Callable[[Any], Any], **kwargs):
         instances = storage.all()
-        for key in instances:
-            if id == instances[key].id:
-                if kwargs and kwargs["key"]:
-                    callback(key)
+        for _key in instances:
+            if _key == key:
+                if kwargs.get("returnKey"):
+                    callback(_key)
                 else:
-                    callback(instances[key])
+                    callback(instances[_key])
                 return True
         else:
             print("** no instance found **")

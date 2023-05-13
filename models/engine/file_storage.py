@@ -34,12 +34,20 @@ class FileStorage():
     def reload(self):
         """Reload objects from JSON file."""
         from models.base_model import BaseModel
+        from models.user import User
+
+        models = {
+            "BaseModel": BaseModel,
+            "User": User
+        }
 
         try:
             with open(FileStorage.__file_path, "r") as file:
                 objects = json.load(file)
                 for key in objects:
-                    objects[key] = BaseModel(**objects[key])
+                    model_name = key.split(".")[0]
+                    model = models[model_name]
+                    objects[key] = model(**objects[key])
                 FileStorage.__objects = objects
         except FileNotFoundError as error:
             return
