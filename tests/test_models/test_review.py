@@ -33,30 +33,25 @@ class TestReview(unittest.TestCase):
         self.assertIsNotNone(obj.id)
         self.assertIsNotNone(obj.created_at)
         self.assertIsNotNone(obj.updated_at)
-        self.assertIsNotNone(obj.email)
-        self.assertIsNotNone(obj.password)
-        self.assertIsNotNone(obj.first_name)
-        self.assertIsNotNone(obj.last_name)
+        self.assertIsNotNone(obj.place_id)
+        self.assertIsNotNone(obj.user_id)
+        self.assertIsNotNone(obj.text)
 
     def test_id_is_str(self):
         obj = Review()
         self.assertIsInstance(obj.id, str)
 
-    def test_email_is_str(self):
+    def test_place_id_is_str(self):
         obj = Review()
-        self.assertIsInstance(obj.email, str)
+        self.assertIsInstance(obj.place_id, str)
 
-    def test_password_is_str(self):
+    def test_user_id_is_str(self):
         obj = Review()
-        self.assertIsInstance(obj.password, str)
+        self.assertIsInstance(obj.user_id, str)
 
-    def test_first_name_is_str(self):
+    def test_text_is_str(self):
         obj = Review()
-        self.assertIsInstance(obj.first_name, str)
-
-    def test_last_name_is_str(self):
-        obj = Review()
-        self.assertIsInstance(obj.last_name, str)
+        self.assertIsInstance(obj.text, str)
 
     def test_created_at_is_datetime(self):
         obj = Review()
@@ -111,18 +106,18 @@ class TestReview(unittest.TestCase):
         self.assertNotIn("124", obj.__dict__.values())
 
     def test_instance_with_kwargs(self):
-        obj = Review(id="ABC", first_name="Michael")
+        obj = Review(id="ABC", text="Nice")
         self.assertEqual("ABC", obj.id)
-        self.assertEqual("Michael", obj.first_name)
+        self.assertEqual("Nice", obj.text)
 
     def test_instance_with_args_kwargs(self):
-        obj = Review("ABC", id="124", last_name="Peter")
+        obj = Review("ABC", id="124", text="Great")
         self.assertNotEqual("ABC", obj.id)
         self.assertEqual("124", obj.id)
-        self.assertEqual("Peter", obj.last_name)
+        self.assertEqual("Great", obj.text)
         self.assertNotIn("ABC", obj.__dict__.values())
         self.assertIn("124", obj.__dict__.values())
-        self.assertIn("Peter", obj.__dict__.values())
+        self.assertIn("Great", obj.__dict__.values())
 
 
 if __name__ == "__main__":

@@ -33,30 +33,15 @@ class TestState(unittest.TestCase):
         self.assertIsNotNone(obj.id)
         self.assertIsNotNone(obj.created_at)
         self.assertIsNotNone(obj.updated_at)
-        self.assertIsNotNone(obj.email)
-        self.assertIsNotNone(obj.password)
-        self.assertIsNotNone(obj.first_name)
-        self.assertIsNotNone(obj.last_name)
+        self.assertIsNotNone(obj.name)
 
     def test_id_is_str(self):
         obj = State()
         self.assertIsInstance(obj.id, str)
 
-    def test_email_is_str(self):
+    def test_name_is_str(self):
         obj = State()
-        self.assertIsInstance(obj.email, str)
-
-    def test_password_is_str(self):
-        obj = State()
-        self.assertIsInstance(obj.password, str)
-
-    def test_first_name_is_str(self):
-        obj = State()
-        self.assertIsInstance(obj.first_name, str)
-
-    def test_last_name_is_str(self):
-        obj = State()
-        self.assertIsInstance(obj.last_name, str)
+        self.assertIsInstance(obj.name, str)
 
     def test_created_at_is_datetime(self):
         obj = State()
@@ -111,18 +96,18 @@ class TestState(unittest.TestCase):
         self.assertNotIn("124", obj.__dict__.values())
 
     def test_instance_with_kwargs(self):
-        obj = State(id="ABC", first_name="Michael")
+        obj = State(id="ABC", name="Lagos")
         self.assertEqual("ABC", obj.id)
-        self.assertEqual("Michael", obj.first_name)
+        self.assertEqual("Lagos", obj.name)
 
     def test_instance_with_args_kwargs(self):
-        obj = State("ABC", id="124", last_name="Peter")
+        obj = State("ABC", id="124", name="Kigali")
         self.assertNotEqual("ABC", obj.id)
         self.assertEqual("124", obj.id)
-        self.assertEqual("Peter", obj.last_name)
+        self.assertEqual("Kigali", obj.name)
         self.assertNotIn("ABC", obj.__dict__.values())
         self.assertIn("124", obj.__dict__.values())
-        self.assertIn("Peter", obj.__dict__.values())
+        self.assertIn("Kigali", obj.__dict__.values())
 
 
 if __name__ == "__main__":
