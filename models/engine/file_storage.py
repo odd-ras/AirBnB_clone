@@ -24,16 +24,22 @@ class FileStorage():
 
     def save(self):
         """Save objects to JSON file."""
-        dictionary = {key: value.to_dict() for key,
-                      value in FileStorage.__objects.items()}
+        dictionary = {}
+        for key in FileStorage.__objects:
+            dictionary[key] = FileStorage.__objects[key].to_dict()
 
         with open(FileStorage.__file_path, "w") as file:
             json.dump(dictionary, file)
 
     def reload(self):
         """Reload objects from JSON file."""
-        with open(FileStorage.__file_path, "r") as file:
-            try:
-                FileStorage.__objects = json.load(file)
-            except FileNotFoundError as error:
-                print("oops an error occurred:", error)
+        from models.base_model import BaseModel
+
+        try:
+            with open(FileStorage.__file_path, "r") as file:
+                objects = json.load(file)
+                for key in objects:
+                    objects[key] = BaseModel(**objects[key])
+                FileStorage.__objects = objects
+        except FileNotFoundError as error:
+            return
