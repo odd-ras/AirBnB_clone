@@ -81,13 +81,13 @@ class TestPlace(unittest.TestCase):
         obj = Place()
         self.assertIsInstance(obj.price_by_night, int)
 
-    def test_latitude_is_int(self):
+    def test_latitude_is_float(self):
         obj = Place()
-        self.assertIsInstance(obj.latitude, int)
+        self.assertIsInstance(obj.latitude, float)
 
-    def test_longitude_is_int(self):
+    def test_longitude_is_float(self):
         obj = Place()
-        self.assertIsInstance(obj.longitude, int)
+        self.assertIsInstance(obj.longitude, float)
 
     def test_amenity_ids_is_list(self):
         obj = Place()
