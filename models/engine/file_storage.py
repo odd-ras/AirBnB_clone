@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Module for FileStorage class."""
 import json
+from models.models import models
 
 
 class FileStorage():
@@ -39,7 +40,9 @@ class FileStorage():
             with open(FileStorage.__file_path, "r") as file:
                 objects = json.load(file)
                 for key in objects:
-                    objects[key] = BaseModel(**objects[key])
+                    model_name = key.split(".")[0]
+                    model = models[model_name]
+                    objects[key] = model(**objects[key])
                 FileStorage.__objects = objects
         except FileNotFoundError as error:
             return

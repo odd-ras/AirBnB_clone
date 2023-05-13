@@ -4,13 +4,13 @@ import cmd
 from models import storage
 from models.base_model import BaseModel
 from typing import Callable, Any
+from models.models import models
 
 
 class HBNBCommand(cmd.Cmd):
     """Define a command-line interpreter."""
 
     prompt = "(hbnb) "
-    classes = {"BaseModel": BaseModel}
 
     def do_create(self, line: str):
         """Create an object.
@@ -21,7 +21,7 @@ class HBNBCommand(cmd.Cmd):
         if not self.__validate(line):
             return
         line = line.strip()
-        obj = self.classes[line]()
+        obj = models[line]()
         obj.save()
         print(obj.id)
 
@@ -116,7 +116,7 @@ class HBNBCommand(cmd.Cmd):
         line = line.strip()
         command = line.split(" ")[0]
 
-        if command not in self.classes.keys():
+        if command not in models.keys():
             print("** class doesn't exist **")
             return False
         if kwargs.get("withId"):
