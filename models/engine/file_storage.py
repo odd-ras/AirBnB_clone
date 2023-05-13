@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Module for FileStorage class."""
 import json
-from models.utils import models
 
 
 class FileStorage():
@@ -35,6 +34,12 @@ class FileStorage():
     def reload(self):
         """Reload objects from JSON file."""
         from models.base_model import BaseModel
+        from models.user import User
+
+        models = {
+            "BaseModel": BaseModel,
+            "User": User
+        }
 
         try:
             with open(FileStorage.__file_path, "r") as file:
