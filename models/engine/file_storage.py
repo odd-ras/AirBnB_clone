@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Module for FileStorage class."""
 import json
-from models.models import models
+from models.utils import models
 
 
 class FileStorage():
