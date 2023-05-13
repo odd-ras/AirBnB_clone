@@ -27,7 +27,7 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         obj = BaseModel()
         obj.save()
-        with open(storage.__file_path, "r") as file:
+        with open("objects.json", "r") as file:
             dictionary = json.load(file)
             key = "{:s}.{:s}".format(obj.__class__.__name__, obj.id)
             self.assertIn(key, dictionary.keys())
