@@ -163,7 +163,7 @@ class HBNBCommand(cmd.Cmd):
                         args.append(key)
                         args.append(value)
                 else:
-                    args_list = args.split(",")
+                    args = args.split(",")
             else:
                 args = args_list
             args = list(map(lambda x: x.strip(), args))
