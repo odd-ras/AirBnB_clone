@@ -2,6 +2,7 @@
 """Console program main file."""
 import cmd
 import re
+import json
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -143,7 +144,19 @@ class HBNBCommand(cmd.Cmd):
             return cmd.Cmd.parseline(self, line)
         matches = list(filter(lambda x: x != "", list(match.groups())))
         if len(matches) > 2:
-            args = matches[2:][0].split(",")
+            args = matches[2:][0]
+            args_list = args.split(",")
+            if len(args_list) > 1:
+                if re.match(r"^{.*}$", args_list[1].strip()):
+                    payload: dict = json.loads(args_list[1].strip())
+                    args = args_list[:1]
+                    for key, value in payload.items():
+                        args.append(key)
+                        args.append(value)
+                else:
+                    args = args_list
+            else:
+                args = args_list
             args = list(map(lambda x: x.strip(), args))
             matches = matches[:2] + args
         if len(matches) > 1:
