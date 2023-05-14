@@ -147,8 +147,10 @@ class HBNBCommand(cmd.Cmd):
             args = matches[2:][0]
             args_list = args.split(",")
             if len(args_list) > 1:
-                if re.match(r"^{.*}$", args_list[1].strip()):
-                    payload: dict = json.loads(args_list[1].strip())
+                payload = args_list[1].strip()
+                if re.match(r"^{.*}$", payload):
+                    payload = re.sub(r"'", "\"", payload)
+                    payload = json.loads(payload)
                     args = args_list[:1]
                     for key, value in payload.items():
                         args.append(key)
