@@ -78,6 +78,28 @@ class TestHBNBCommand_Execute(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertTrue(HBNBCommand().onecmd("EOF"))
 
+    def test_unknown_syntax(self):
+        command = "hey"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "*** Unknown syntax: hey")
+
+    def test_unknown_syntax_method(self):
+        command = "BaseModel.update"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "*** Unknown syntax: BaseModel.update")
+
     def test_missing_class(self):
         command = "create"
         with patch("sys.stdout", new=StringIO()) as output:
