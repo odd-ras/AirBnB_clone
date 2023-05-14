@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """Module for testing BaseModel class."""
+import os
 import unittest
 from models.base_model import BaseModel
 from models import storage
 from datetime import datetime
+
+objects_path = os.path.join(os.path.abspath("objects.json"))
 
 
 class TestBaseModel(unittest.TestCase):
@@ -97,6 +100,12 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual("124", obj.id)
         self.assertNotIn("ABC", obj.__dict__.values())
         self.assertIn("124", obj.__dict__.values())
+
+    def tearDown(self):
+        try:
+            os.remove(objects_path)
+        except FileNotFoundError:
+            pass
 
 
 if __name__ == "__main__":

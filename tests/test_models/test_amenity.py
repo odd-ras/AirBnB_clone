@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 """Module for Amenity tests."""
+import os
 import unittest
 from datetime import datetime
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models import storage
+
+objects_path = os.path.join(os.path.abspath("objects.json"))
 
 
 class TestAmenity(unittest.TestCase):
@@ -108,6 +111,12 @@ class TestAmenity(unittest.TestCase):
         self.assertNotIn("ABC", obj.__dict__.values())
         self.assertIn("124", obj.__dict__.values())
         self.assertIn("Hello World", obj.__dict__.values())
+
+    def tearDown(self):
+        try:
+            os.remove(objects_path)
+        except FileNotFoundError:
+            pass
 
 
 if __name__ == "__main__":

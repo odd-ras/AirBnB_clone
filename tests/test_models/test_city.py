@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 """Module for City tests."""
+import os
 import unittest
 from datetime import datetime
 from models.city import City
 from models.base_model import BaseModel
 from models import storage
+
+objects_path = os.path.join(os.path.abspath("objects.json"))
 
 
 class TestCity(unittest.TestCase):
@@ -113,6 +116,12 @@ class TestCity(unittest.TestCase):
         self.assertNotIn("ABC", obj.__dict__.values())
         self.assertIn("124", obj.__dict__.values())
         self.assertIn("Great City", obj.__dict__.values())
+
+    def tearDown(self):
+        try:
+            os.remove(objects_path)
+        except FileNotFoundError:
+            pass
 
 
 if __name__ == "__main__":

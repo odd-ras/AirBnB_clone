@@ -1,10 +1,13 @@
 #!/usr/bin/python3
 """Module for Place tests."""
+import os
 import unittest
 from datetime import datetime
 from models.place import Place
 from models.base_model import BaseModel
 from models import storage
+
+objects_path = os.path.join(os.path.abspath("objects.json"))
 
 
 class TestPlace(unittest.TestCase):
@@ -158,6 +161,12 @@ class TestPlace(unittest.TestCase):
         self.assertNotIn("ABC", obj.__dict__.values())
         self.assertIn("124", obj.__dict__.values())
         self.assertIn(["kh-iu-0o-7ff"], obj.__dict__.values())
+
+    def tearDown(self):
+        try:
+            os.remove(objects_path)
+        except FileNotFoundError:
+            pass
 
 
 if __name__ == "__main__":
