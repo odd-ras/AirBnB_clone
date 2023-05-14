@@ -142,6 +142,10 @@ class HBNBCommand(cmd.Cmd):
         if match is None:
             return cmd.Cmd.parseline(self, line)
         matches = list(filter(lambda x: x != "", list(match.groups())))
+        if len(matches) > 2:
+            args = matches[2:][0].split(",")
+            args = list(map(lambda x: x.strip(), args))
+            matches = matches[:2] + args
         if len(matches) > 1:
             tmp = matches[0]
             matches[0] = matches[1]
