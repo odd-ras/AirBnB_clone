@@ -78,6 +78,147 @@ class TestHBNBCommand_Execute(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             self.assertTrue(HBNBCommand().onecmd("EOF"))
 
+    def test_missing_class(self):
+        command = "create"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "** class name missing **")
+
+    def test_instance_id_missing(self):
+        command = "show BaseModel"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "** instance id missing **")
+
+    def test_instance_id_missing_method(self):
+        command = "BaseModel.show()"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "** instance id missing **")
+
+    def test_class_doesnt_exist(self):
+        command = "create MyModel"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "** class doesn't exist **")
+
+    def test_class_doesnt_exist_method(self):
+        command = "MyModel.create()"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "** class doesn't exist **")
+
+    def test_no_instance_found(self):
+        command = "show BaseModel 1234"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "** no instance found **")
+
+    def test_no_instance_found_method(self):
+        command = "BaseModel.show(1234)"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertGreater(len(output.getvalue().strip()), 0)
+            self.assertEqual(output.getvalue().strip(),
+                             "** no instance found **")
+
+    def test_attribute_name_missing(self):
+        command = "create BaseModel"
+        instance_id = ""
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            instance_id = output.getvalue().strip()
+            self.assertIsInstance(instance_id, str)
+        command = f"update BaseModel {instance_id}"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertEqual(output.getvalue().strip(),
+                             "** attribute name missing **")
+
+    def test_attribute_name_missing_method(self):
+        command = "BaseModel.create()"
+        instance_id = ""
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            instance_id = output.getvalue().strip()
+            self.assertIsInstance(instance_id, str)
+        command = f"BaseModel.update({instance_id})"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertEqual(output.getvalue().strip(),
+                             "** attribute name missing **")
+
+    def test_value_missing(self):
+        command = "create User"
+        instance_id = ""
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            instance_id = output.getvalue().strip()
+            self.assertIsInstance(instance_id, str)
+        command = f"update User {instance_id} first_name"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertEqual(output.getvalue().strip(),
+                             "** value missing **")
+
+    def test_value_missing_method(self):
+        command = "User.create()"
+        instance_id = ""
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            instance_id = output.getvalue().strip()
+            self.assertIsInstance(instance_id, str)
+        command = f"User.update({instance_id}, first_name)"
+        with patch("sys.stdout", new=StringIO()) as output:
+            HBNBCommand().onecmd(command)
+            self.assertIsInstance(output.getvalue().strip(), str)
+            self.assertNotEqual(output.getvalue().strip(), "")
+            self.assertNotEqual(output.getvalue().strip(), "\n")
+            self.assertEqual(output.getvalue().strip(),
+                             "** value missing **")
+
     def test_create(self):
         command = "create BaseModel"
         with patch("sys.stdout", new=StringIO()) as output:

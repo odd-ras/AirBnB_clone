@@ -148,7 +148,6 @@ class HBNBCommand(cmd.Cmd):
         if match is None:
             return cmd.Cmd.parseline(self, line)
         matches = list(filter(lambda x: x != "", list(match.groups())))
-        dictionary_args = False
         if len(matches) > 2:
             args = matches[2:][0]
             args_list = args.split(",", maxsplit=1)
@@ -165,7 +164,7 @@ class HBNBCommand(cmd.Cmd):
                 else:
                     args = args.split(",")
             else:
-                args = args_list
+                args = args.split(",")
             args = list(map(lambda x: x.strip(), args))
             matches = matches[:2] + args
         if len(matches) > 1:
@@ -173,7 +172,7 @@ class HBNBCommand(cmd.Cmd):
             matches[0] = matches[1]
             matches[1] = tmp
             args = [" ".join(matches[1:])]
-            matches = [matches[0]] + args
+            matches = matches[:1] + args
         return tuple(matches + [" ".join(matches)])
 
     def emptyline(self):
