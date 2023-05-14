@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Console program main file."""
 import cmd
+import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
@@ -31,6 +32,7 @@ class HBNBCommand(cmd.Cmd):
 
         Usage:
         create <class>
+        <class>.create()
         """
         if not self.__validate(line):
             return
@@ -44,6 +46,7 @@ class HBNBCommand(cmd.Cmd):
 
         Usage:
         show <class> <id>
+        <class>.show(<id>)
         """
         if not self.__validate(line, withId=True):
             return
@@ -57,6 +60,7 @@ class HBNBCommand(cmd.Cmd):
 
         Usage:
         destroy <class> <id>
+        <class>.destroy(<id>)
         """
         if not self.__validate(line, withId=True):
             return
@@ -72,6 +76,7 @@ class HBNBCommand(cmd.Cmd):
 
         Usage:
         all [class]
+        <class>.all()
         """
         instances = storage.all()
         if not line:
@@ -84,6 +89,23 @@ class HBNBCommand(cmd.Cmd):
         for key in instances:
             if class_name in key:
                 print(instances[key])
+
+    def do_count(self, line: str):
+        """Count all instances of a model.
+
+        Usage:
+        count [class]
+        <class>.count()
+        """
+        instances = storage.all()
+        if not self.__validate(line):
+            return
+        class_name = line.strip().split(" ")[0]
+        count = 0
+        for key in instances:
+            if class_name in key:
+                count += 1
+        print(count)
 
     def do_update(self, line: str):
         """Update an object.
@@ -113,6 +135,20 @@ class HBNBCommand(cmd.Cmd):
     def do_quit(self, line: str):
         """Quit command to exit the program."""
         return True
+
+    def parseline(self, line: str):
+        """Before running input command."""
+        match = re.search(r"^(\w+)\.(\w+)\((.*)\)$", line)
+        if match is None:
+            return cmd.Cmd.parseline(self, line)
+        matches = list(filter(lambda x: x != "", list(match.groups())))
+        if len(matches) > 1:
+            tmp = matches[0]
+            matches[0] = matches[1]
+            matches[1] = tmp
+            args = [" ".join(matches[1:])]
+            matches = [matches[0]] + args
+        return tuple(matches + [" ".join(matches)])
 
     def emptyline(self):
         """Don't execute anything."""
