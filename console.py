@@ -27,6 +27,7 @@ class HBNBCommand(cmd.Cmd):
         "Place": Place,
         "Review": Review,
     }
+    update_dict = {}
 
     def do_create(self, line: str):
         """Create an object.
@@ -126,6 +127,10 @@ class HBNBCommand(cmd.Cmd):
             except (TypeError, ValueError):
                 setattr(instance, attr, value)
             finally:
+                for key in self.update_dict:
+                    setattr(instance, key, type(
+                        getattr(instance, key, ""))(self.update_dict[key]))
+                self.update_dict = {}
                 instance.save()
         self.__on_found(key, callback)
 
@@ -143,20 +148,22 @@ class HBNBCommand(cmd.Cmd):
         if match is None:
             return cmd.Cmd.parseline(self, line)
         matches = list(filter(lambda x: x != "", list(match.groups())))
+        dictionary_args = False
         if len(matches) > 2:
             args = matches[2:][0]
-            args_list = args.split(",")
+            args_list = args.split(",", maxsplit=1)
             if len(args_list) > 1:
                 payload = args_list[1].strip()
                 if re.match(r"^{.*}$", payload):
                     payload = re.sub(r"'", "\"", payload)
                     payload = json.loads(payload)
                     args = args_list[:1]
+                    self.update_dict = payload
                     for key, value in payload.items():
                         args.append(key)
                         args.append(value)
                 else:
-                    args = args_list
+                    args_list = args.split(",")
             else:
                 args = args_list
             args = list(map(lambda x: x.strip(), args))
