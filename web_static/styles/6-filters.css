@@ -18,6 +18,7 @@ section.filters button {
   border-radius: 4px;
   margin-left: auto;
   margin-right: 30px;
+  cursor: pointer;
 }
 
 section.filters button:hover {
@@ -26,10 +27,10 @@ section.filters button:hover {
 
 section.filters .locations,
 section.filters .amenities {
+  position: relative;
   height: 100%;
   width: 25%;
-  padding: 20px 30px;
-  box-sizing: border-box;
+  cursor: pointer;
 }
 
 section.filters .locations {
@@ -39,15 +40,52 @@ section.filters .locations {
 section.filters .locations h3,
 section.filters .amenities h3 {
   font-weight: 600;
-  line-height: 0;
-  margin: 0;
+  padding: 15px 20px 10px;
 }
 
 section.filters .locations h4,
 section.filters .amenities h4 {
   font-weight: 400;
   font-size: 14px;
+  line-height: 14px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 0 20px 10px;
+}
+
+.popover {
+  position: absolute;
+  top: 100%;
+  background-color: #fafafa;
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 30px 20px;
+  display: none;
+}
+
+.popover ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.popover h2 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.locations:hover .popover,
+.amenities:hover .popover {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.locations:hover .popover {
+  gap: 16px;
 }
