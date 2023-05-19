@@ -3,10 +3,14 @@ header {
   height: 70px;
   width: 100%;
   border-bottom: 1px solid #cccccc;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  box-sizing: border-box;
 }
 
 header div {
-  width: 150px;
+  width: 130px;
   height: 70px;
   background: url(/images/logo.png) no-repeat center;
 }
