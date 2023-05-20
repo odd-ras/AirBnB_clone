@@ -3,11 +3,11 @@
   padding: 20px;
 }
 
-.places h1 {
+.places > h1 {
   font-size: 30px;
 }
 
-.places ul {
+.places > ul {
   width: 100%;
   list-style: none;
   display: flex;
@@ -16,7 +16,7 @@
   justify-content: center;
 }
 
-.places li {
+.places > ul > li {
   border: 1px solid #ff5a5f;
   width: 390px;
   padding: 20px;
@@ -47,7 +47,7 @@
   padding: 10px;
 }
 
-.places article h2 {
+.places article > h2 {
   font-size: 30px;
   text-align: center;
 }
@@ -90,4 +90,83 @@
 
 .number_bathrooms > div {
   background: url(/images/number_bathrooms.png) no-repeat center;
+}
+
+.places .amenities {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 40px;
+}
+
+.places .amenities h2 {
+  font-size: 16px;
+  line-height: 24px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.places .amenities ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.places .amenities ul li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.places .amenities ul li:nth-child(1) > div {
+  width: 20px;
+  height: 20px;
+  background: url(/images/pet.png) no-repeat center;
+  background-size: contain;
+}
+
+.places .amenities ul li:nth-child(2) > div {
+  width: 20px;
+  height: 20px;
+  background: url(/images/tv.png) no-repeat center;
+  background-size: contain;
+}
+
+.places .amenities ul li:nth-child(3) > div {
+  width: 20px;
+  height: 20px;
+  background: url(/images/wifi.png) no-repeat center;
+  background-size: contain;
+}
+
+.places .reviews {
+  margin-top: 40px;
+}
+
+.places .reviews h2 {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.places .reviews ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.places .reviews li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.places .reviews ul h3 {
+  font-size: 14px;
+}
+
+.places .reviews ul p {
+  font-size: 12px;
 }
