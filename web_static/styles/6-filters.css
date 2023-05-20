@@ -56,6 +56,7 @@ section.filters .amenities h4 {
 
 .popover {
   position: absolute;
+  z-index: 2;
   top: 100%;
   background-color: #fafafa;
   width: 100%;
